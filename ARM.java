@@ -19,8 +19,11 @@ public class ARM {
 
             ArrayList<int []> transactionsList = new ArrayList<int []>();
 
-            while(scSimple.hasNextLine()) {
-                String line = scSimple.nextLine();
+            //reassign sc for the data file you want to scan
+            Scanner sc = scSimple;
+
+            while(sc.hasNextLine()) {
+                String line = sc.nextLine();
                 String [] strArr = line.split(" ");
                 int [] transaction = new int[strArr.length];
 
