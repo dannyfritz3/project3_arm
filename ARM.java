@@ -1,19 +1,35 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
+import java.io.*;
 
 public class ARM {
     public static void main(String [] args) throws IndexOutOfBoundsException, FileNotFoundException {
-        double minsupp = Double.parseDouble(args[0]);
+        //double minsupp = Double.parseDouble(args[0]);
+        double minsupp = 5;
         if(minsupp < 0 || minsupp > 100) {
             throw new IndexOutOfBoundsException("Please select a minsupp threshold between 0 and 100");
         }
         try {
-            Scanner scAccidents = new Scanner("datasets/accidents.data");
-            Scanner scChess = new Scanner("datasets/chess.data");
-            Scanner scKosarak = new Scanner("datasets/kosarak.data");
-            Scanner scRetail = new Scanner("datasets/retail.data");
-            Scanner scSimple = new Scanner("datasets/simpledataset.data");
+            Scanner scAccidents = new Scanner(new File("datasets/accidents.dat"));
+            Scanner scChess = new Scanner(new File("datasets/chess.dat"));
+            Scanner scKosarak = new Scanner(new File("datasets/kosarak.dat"));
+            Scanner scRetail = new Scanner(new File("datasets/retail.dat"));
+            Scanner scSimple = new Scanner(new File("datasets/simpledataset.dat"));
+
+            ArrayList<int []> transactionsList = new ArrayList<int []>();
+
+            while(scSimple.hasNextLine()) {
+                String line = scSimple.nextLine();
+                String [] strArr = line.split(" ");
+                int [] transaction = new int[strArr.length];
+
+                for(int i = 0; i < strArr.length; i++) {
+                    transaction[i] = Integer.parseInt(strArr[i]);
+                }
+
+                transactionsList.add(transaction);
+            }
 
             scAccidents.close();
             scChess.close();
