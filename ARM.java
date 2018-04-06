@@ -29,10 +29,11 @@ public class ARM {
     }
 
     public static int [] generateFrequentItemSubset(int k) {
-        int [] L1 = new int[numItems];
+        int [] L1 = new int[0];
         for(int i = 1; i <= numItems; i++) {
             L1[i] = i;
         }
+        return null;
     }
 
     public static void main(String [] args) throws IndexOutOfBoundsException, FileNotFoundException {
