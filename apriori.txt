@@ -1,0 +1,27 @@
+Method: 
+Let k=1
+Generate frequent itemsets of length 1
+Repeat until no new frequent itemsets are identified
+	Generate length (k+1) candidate itemsets from k frequent itemsets
+	Prune candidate itemsets containing subsets of length k that are infrequent 
+	Count the support of each candidate by scanning the DB
+	Eliminate candidates that are infrequent, leaving only those that are frequent
+
+Pseudo-code:
+Ck: Candidate itemset of size k
+Lk : frequent itemset of size k
+
+L1 = {frequent items};
+for (k = 1; Lk !=; k++) do begin
+      Ck+1 = candidates generated from Lk (self-join step)
+      prune any Ck+1 that has an infrequent subset (anti   	monotone / apriori pruning)
+
+      for each transaction t in database do
+   increment the count of all candidates in Ck+1 that are      contained in t
+end 
+      
+      Lk+1  = candidates in Ck+1 with min_support
+    
+end
+return  Lk;
+

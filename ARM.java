@@ -21,16 +21,19 @@ public class ARM {
         ArrayList<int []> FIS = new ArrayList<int []>();
 
         for(int k = 1; FIS.size() != 0; k++) {
-            int [] C = generateCandidates(k);
+            int [] Lk = generateFrequentItemSubset(k);
             for(int [] transaction : transactionsList) {
 
             }
         }
     }
 
-    // public static int [] generateCandidates(int k) {
-
-    // }
+    public static int [] generateFrequentItemSubset(int k) {
+        int [] L1 = new int[numItems];
+        for(int i = 1; i <= numItems; i++) {
+            L1[i] = i;
+        }
+    }
 
     public static void main(String [] args) throws IndexOutOfBoundsException, FileNotFoundException {
         //double minsupp = Double.parseDouble(args[0]);
