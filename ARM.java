@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.util.*;
 import java.io.*;
 
+
+https://github.com/dannyfritz3/project3_arm/invitations
+
 public class ARM {
 
     private static ArrayList<int []> transactionsList;
@@ -62,6 +65,7 @@ public class ARM {
             }
 
             numTransactions = transactionsList.size();
+
             scAccidents.close();
             scChess.close();
             scKosarak.close();
