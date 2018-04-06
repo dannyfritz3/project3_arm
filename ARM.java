@@ -1,3 +1,8 @@
+/** 
+ * Authors: Danny Fritz and Conor Lorsung
+ * Purpose: Apriori algorithm for science and a good grade.
+*/
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
