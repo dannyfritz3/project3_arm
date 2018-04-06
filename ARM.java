@@ -9,8 +9,6 @@ import java.util.*;
 import java.io.*;
 
 
-https://github.com/dannyfritz3/project3_arm/invitations
-
 public class ARM {
 
     private static ArrayList<int []> transactionsList;
