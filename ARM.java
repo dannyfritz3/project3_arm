@@ -21,7 +21,7 @@ public class ARM {
         ArrayList<int []> FIS = new ArrayList<int []>();
 
         for(int k = 1; FIS.size() != 0; k++) {
-            int [] C = generateCandidates(k);
+            //int [] C = generateCandidates(k);
             for(int [] transaction : transactionsList) {
 
             }
@@ -63,6 +63,10 @@ public class ARM {
             }
 
             numTransactions = transactionsList.size();
+            
+            for(int[] arr : transactionsList) {
+                System.out.println(Arrays.toString(arr));
+            }
 
             scAccidents.close();
             scChess.close();
