@@ -43,14 +43,16 @@ public class ARM {
         ArrayList<ArrayList<Integer>> l1 = new ArrayList<ArrayList<Integer>>();
         ArrayList<Transaction>        at = new ArrayList<Transaction>();
         ArrayList<Transaction>        ft = new ArrayList<Transaction>();
+
         //Build transactions for each int[] in the input list
         for(int[] i : input) {
             at.add(new Transaction(i, 0));
         }
 
-
+        //The unique values from the input transactions
         ArrayList<Integer> values = new ArrayList<Integer>();
 
+        //Parse out the unique values and add them to ArrayList values
         for(Transaction t : at) {
             for(int i = 0; i < t.getItems().length; i++) {
                 if(!values.contains(t.getItems()[i])) {
@@ -59,22 +61,34 @@ public class ARM {
             }
         }
 
+        //Sort the ArrayList for fun
         Collections.sort(values);
+        
+        //Create new transactions for each of the unique values
         for(int i : values) {
             ft.add(new Transaction(new int[]{i}, 0));
         }
+
+        //Generate updated support weights for the transactions
         ft = genWeights(input, ft);
+
+        //Debugging print
         System.out.println("------------");
         for(Transaction t : ft) {
             System.out.println("FT: " + t.toString());
         }
 
+        //Heart of the apriori algorithm
         for(int k = 0; !lk.get(k).isEmpty(); k++) {
             //ck.add(k+1, candidates);
         }
-
     }
 
+    /**
+     * This method generates weights for the provided <ArrayList data>. It references
+     * the values contained within <ArrayList data> against those transactions in the
+     * <ArrayList input>.
+     */
     private static ArrayList<Transaction> genWeights(ArrayList<int[]> input, ArrayList<Transaction> data) {
         for(Transaction t : data) {
             double supp = 0.0;
