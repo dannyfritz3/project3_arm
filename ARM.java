@@ -143,12 +143,7 @@ public class ARM {
     }
 
     private static ArrayList<Transaction> updateSets(ArrayList<Transaction> data, double threshold) {
-        for(int i = 0; i < data.size(); i++) {
-            if(data.get(i).getSupport() < threshold) {
-                data.remove(i);
-            }
-        }
-        return data;
+        
     }
 
     public static void main(String [] args) throws IndexOutOfBoundsException, FileNotFoundException {
