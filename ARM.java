@@ -131,6 +131,12 @@ public class ARM {
     }
 
     private static ArrayList<Transaction> updateSets(ArrayList<Transaction> data, double threshold) {
+        for(int i = 0; i < data.size(); i++) {
+            if(data.get(i).getSupport() < threshold) {
+                data.remove(i);
+            }
+        }
+        
         ArrayList<ArrayList<Integer>> arr = new ArrayList<ArrayList<Integer>>();
         ArrayList<int []> arr2 = new ArrayList<int []>();
 
