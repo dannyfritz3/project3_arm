@@ -37,22 +37,88 @@ public class ARM {
     }
 
     private static void apriori(int size, ArrayList<int[]> input) {
+        //Variables used in the method
         ArrayList<ArrayList<Integer>> ck = new ArrayList<ArrayList<Integer>>();
         ArrayList<ArrayList<Integer>> lk  = new ArrayList<ArrayList<Integer>>();
         ArrayList<ArrayList<Integer>> l1 = new ArrayList<ArrayList<Integer>>();
         ArrayList<Transaction>        at = new ArrayList<Transaction>();
+        ArrayList<Transaction>        ft = new ArrayList<Transaction>();
+        //Build transactions for each int[] in the input list
         for(int[] i : input) {
             at.add(new Transaction(i, 0));
         }
 
+
+        ArrayList<Integer> values = new ArrayList<Integer>();
+
         for(Transaction t : at) {
-            System.out.println(t.toString());
+            for(int i = 0; i < t.getItems().length; i++) {
+                if(!values.contains(t.getItems()[i])) {
+                    values.add(t.getItems()[i]);
+                }
+            }
+        }
+
+        Collections.sort(values);
+        for(int i : values) {
+            ft.add(new Transaction(new int[]{i}, 0));
+        }
+        ft = genWeights(input, ft);
+        System.out.println("------------");
+        for(Transaction t : ft) {
+            System.out.println("FT: " + t.toString());
         }
 
         for(int k = 0; !lk.get(k).isEmpty(); k++) {
             //ck.add(k+1, candidates);
         }
 
+    }
+
+    private static ArrayList<Transaction> genWeights(ArrayList<int[]> input, ArrayList<Transaction> data) {
+        for(Transaction t : data) {
+            double supp = 0.0;
+            int    suppCount = 0;
+
+            for(int[] arr : input) {
+
+                int[] loopArr  = new int[]{};
+                int[] checkArr = new int[]{};
+
+                boolean flip = true;
+
+                if(t.getItems().length >= arr.length) {
+                    checkArr = t.getItems();
+                    loopArr = arr;
+                    flip = false;
+                } else if(t.getItems().length < arr.length) {
+                    checkArr = arr;
+                    loopArr = t.getItems();
+                    flip = true;
+                }
+
+                int check = 0;
+                for(int i = 0; i < loopArr.length; i++) {
+                    for(int j = 0; j < checkArr.length; j++) {
+                        if(loopArr[i] == checkArr[j]) {
+                            check++;
+                        }
+                    }
+                }
+                System.out.println(check + " : " + loopArr.length);
+                if(flip) {
+                    if(check == loopArr.length) {
+                        suppCount++;
+                    }
+                } else {
+                    if(check == checkArr.length) {
+                        suppCount++;
+                    }
+                }
+            }
+            t.setSupport((double) suppCount / (double) input.size());
+        }
+        return data;
     }
 
     public static void main(String [] args) throws IndexOutOfBoundsException, FileNotFoundException {
