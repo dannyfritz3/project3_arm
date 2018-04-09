@@ -36,6 +36,25 @@ public class ARM {
         return null;
     }
 
+    private static void apriori(int size, ArrayList<int[]> input) {
+        ArrayList<ArrayList<Integer>> ck = new ArrayList<ArrayList<Integer>>();
+        ArrayList<ArrayList<Integer>> lk  = new ArrayList<ArrayList<Integer>>();
+        ArrayList<ArrayList<Integer>> l1 = new ArrayList<ArrayList<Integer>>();
+        ArrayList<Transaction>        at = new ArrayList<Transaction>();
+        for(int[] i : input) {
+            at.add(new Transaction(i, 0));
+        }
+
+        for(Transaction t : at) {
+            System.out.println(t.toString());
+        }
+
+        for(int k = 0; !lk.get(k).isEmpty(); k++) {
+            //ck.add(k+1, candidates);
+        }
+
+    }
+
     public static void main(String [] args) throws IndexOutOfBoundsException, FileNotFoundException {
         //double minsupp = Double.parseDouble(args[0]);
         minsupp = 5;
@@ -66,15 +85,47 @@ public class ARM {
                 transactionsList.add(transaction);
             }
 
-            numTransactions = transactionsList.size();
-
             scAccidents.close();
             scChess.close();
             scKosarak.close();
             scRetail.close();
             scSimple.close();
+
+            apriori(5, transactionsList);
+
         } catch(Exception e) {
             System.out.println(e);
+        }
+    }
+
+    static class Transaction {
+
+        private int[]  items;
+        private double support;
+
+        public Transaction(int[] items, double support) {
+            this.items = items;
+            this.support = support;
+        }
+
+        public int[] getItems() {
+            return this.items;
+        }
+
+        public void setItems(int[] items) {
+            this.items = items;
+        }
+
+        public double getSupport() {
+            return this.support;
+        }
+
+        public void setSupport(double support) {
+            this.support = support;
+        }
+
+        public String toString() {
+            return Arrays.toString(this.items) + " : " + this.support;
         }
     }
 }
