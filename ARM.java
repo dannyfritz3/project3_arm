@@ -16,18 +16,6 @@ public class ARM {
     private static int numItems;
     private static int numTransactions;
 
-    public static void findFIS(ArrayList<int []> transactionsList) {
-        ArrayList<int []> CIS = new ArrayList<int []>();
-        ArrayList<int []> FIS = new ArrayList<int []>();
-
-        for(int k = 1; FIS.size() != 0; k++) {
-            int [] Lk = generateFrequentItemSubset(k);
-            for(int [] transaction : transactionsList) {
-
-            }
-        }
-    }
-
     public static int [] generateFrequentItemSubset(int k) {
         int [] L1 = new int[0];
         for(int i = 1; i <= numItems; i++) {
@@ -143,7 +131,25 @@ public class ARM {
     }
 
     private static ArrayList<Transaction> updateSets(ArrayList<Transaction> data, double threshold) {
-        
+        ArrayList<ArrayList<Integer>> arr = new ArrayList<ArrayList<Integer>>();
+        ArrayList<int []> arr2 = new ArrayList<int []>();
+
+        for(int i = 0; i < data.size(); i++) {
+            for(int j = i + 1; j < data.size(); j++) {
+                //ArrayList<Integer> group = new ArrayList<Integer>();
+                int [] pair = new int [2];
+                //group.add(data.get(i).getItems()[0]);
+                //group.add(data.get(j).getItems()[0]);
+                pair[0] = data.get(i).getItems()[0];
+                pair[1] = data.get(j).getItems()[0];
+
+                arr2.add(pair);
+            }
+        }
+        for(int [] x : arr2) {
+            System.out.println("[" + x[0] + ", " + x[1] + "]");
+        }
+        return null;
     }
 
     public static void main(String [] args) throws IndexOutOfBoundsException, FileNotFoundException {
