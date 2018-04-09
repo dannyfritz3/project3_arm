@@ -72,8 +72,15 @@ public class ARM {
         //Generate updated support weights for the transactions
         ft = genWeights(input, ft);
 
-        //Debugging print
+        //Debugging print after generated weights
         System.out.println("------------");
+        for(Transaction t : ft) {
+            System.out.println("FT: " + t.toString());
+        }
+
+        ft = updateSets(ft, 0.6);
+        //Debugging print after update
+        System.out.println("---update---");
         for(Transaction t : ft) {
             System.out.println("FT: " + t.toString());
         }
@@ -131,6 +138,15 @@ public class ARM {
                 }
             }
             t.setSupport((double) suppCount / (double) input.size());
+        }
+        return data;
+    }
+
+    private static ArrayList<Transaction> updateSets(ArrayList<Transaction> data, double threshold) {
+        for(int i = 0; i < data.size(); i++) {
+            if(data.get(i).getSupport() < threshold) {
+                data.remove(i);
+            }
         }
         return data;
     }
