@@ -68,7 +68,14 @@ public class ARM {
 
         ft = updateSets(ft, 0.6);
         //Debugging print after update
-        System.out.println("---update---");
+        System.out.println("---update1---");
+        for(Transaction t : ft) {
+            System.out.println("FT: " + t.toString());
+        }
+
+        ft = genWeights(input, ft);
+        //Debugging print after update
+        System.out.println("---update2---");
         for(Transaction t : ft) {
             System.out.println("FT: " + t.toString());
         }
@@ -114,7 +121,6 @@ public class ARM {
                         }
                     }
                 }
-                System.out.println(check + " : " + loopArr.length);
                 if(flip) {
                     if(check == loopArr.length) {
                         suppCount++;
