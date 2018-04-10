@@ -137,25 +137,20 @@ public class ARM {
             }
         }
         
-        ArrayList<ArrayList<Integer>> arr = new ArrayList<ArrayList<Integer>>();
-        ArrayList<int []> arr2 = new ArrayList<int []>();
+        ArrayList<Transaction> arrTransaction = new ArrayList<Transaction>();
+
+        int [] group = new int[]{};
 
         for(int i = 0; i < data.size(); i++) {
             for(int j = i + 1; j < data.size(); j++) {
-                //ArrayList<Integer> group = new ArrayList<Integer>();
-                int [] pair = new int [2];
-                //group.add(data.get(i).getItems()[0]);
-                //group.add(data.get(j).getItems()[0]);
-                pair[0] = data.get(i).getItems()[0];
-                pair[1] = data.get(j).getItems()[0];
-
-                arr2.add(pair);
+                group = new int [2];
+                group[0] = data.get(i).getItems()[0];
+                group[1] = data.get(j).getItems()[0];
+                Transaction t = new Transaction(group, threshold);
+                arrTransaction.add(t);
             }
         }
-        for(int [] x : arr2) {
-            System.out.println("[" + x[0] + ", " + x[1] + "]");
-        }
-        return null;
+        return arrTransaction;
     }
 
     public static void main(String [] args) throws IndexOutOfBoundsException, FileNotFoundException {
