@@ -66,7 +66,7 @@ public class ARM {
             System.out.println("FT: " + t.toString());
         }
 
-        ft = updateSets(ft, 0.6);
+        ft = updateSets(ft, 0.6, 2);
         //Debugging print after update
         System.out.println("---update1---");
         for(Transaction t : ft) {
@@ -80,10 +80,14 @@ public class ARM {
             System.out.println("FT: " + t.toString());
         }
 
+        int[] vals = setUnion(ft.get(0).getItems(), ft.get(1).getItems());
+
+        System.out.println(Arrays.toString(vals));
+
         //Heart of the apriori algorithm
-        for(int k = 0; !lk.get(k).isEmpty(); k++) {
+        /*for(int k = 0; !lk.get(k).isEmpty(); k++) {
             //ck.add(k+1, candidates);
-        }
+        }*/
     }
 
     /**
@@ -136,7 +140,7 @@ public class ARM {
         return data;
     }
 
-    private static ArrayList<Transaction> updateSets(ArrayList<Transaction> data, double threshold) {
+    private static ArrayList<Transaction> updateSets(ArrayList<Transaction> data, double threshold, int k) {
         for(int i = 0; i < data.size(); i++) {
             if(data.get(i).getSupport() < threshold) {
                 data.remove(i);
@@ -149,7 +153,7 @@ public class ARM {
 
         for(int i = 0; i < data.size(); i++) {
             for(int j = i + 1; j < data.size(); j++) {
-                group = new int [2];
+                group = new int [k];
                 group[0] = data.get(i).getItems()[0];
                 group[1] = data.get(j).getItems()[0];
                 Transaction t = new Transaction(group, threshold);
@@ -200,6 +204,29 @@ public class ARM {
         } catch(Exception e) {
             System.out.println(e);
         }
+    }
+
+    private static int[] setUnion(int[] x, int[] y) {
+        Integer[] opX = new Integer[x.length];
+        for(int i = 0; i < x.length; i++) {
+            opX[i] = x[i];
+        }
+
+        Integer[] opY = new Integer[y.length];
+        for(int i = 0; i < y.length; i++) {
+            opY[i] = y[i];
+        }
+
+        Set<Integer> newSet = new HashSet<Integer>(Arrays.asList(opX));
+        newSet.addAll(Arrays.asList(opY));
+        Integer[] opArr = newSet.toArray(new Integer[newSet.size()]);
+
+        int[] outArr = new int[opArr.length];
+        for(int i = 0; i < opArr.length; i++) {
+            outArr[i] = opArr[i];
+        }
+        
+        return outArr;
     }
 
     static class Transaction {
