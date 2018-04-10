@@ -80,7 +80,7 @@ public class ARM {
             System.out.println("FT: " + t.toString());
         }
 
-        int[] vals = setUnion(ft.get(0).getItems(), ft.get(1).getItems());
+        int[] vals = setUnion(ft, ft.get(0).getItems(), ft.get(1).getItems());
 
         System.out.println(Arrays.toString(vals));
 
@@ -206,7 +206,21 @@ public class ARM {
         }
     }
 
-    private static int[] setUnion(int[] x, int[] y) {
+    private static int[] setUnion(ArrayList<Transaction> trans, int[] x, int[] y) {
+        //Grab and store all of the unique prefixes and their locations in the transaction ArrayList
+        ArrayList<Integer> prefixes = new ArrayList<Integer>();
+        ArrayList<Integer> prefLocs = new ArrayList<Integer>();
+        for(int i = 0; i < trans.size(); i++) {
+            for(int j = 0; j < trans.get(i).getItems().length-1; j++) {
+                Integer prefix = trans.get(i).getItems()[j];
+                if(!prefixes.contains(prefix)) {
+                    prefixes.add(prefix);
+                    prefLocs.add(i);
+                }
+            }
+        }
+        
+        System.out.println(prefixes + "\n" + prefLocs);
         Integer[] opX = new Integer[x.length];
         for(int i = 0; i < x.length; i++) {
             opX[i] = x[i];
@@ -225,7 +239,6 @@ public class ARM {
         for(int i = 0; i < opArr.length; i++) {
             outArr[i] = opArr[i];
         }
-        
         return outArr;
     }
 
