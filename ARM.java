@@ -80,9 +80,15 @@ public class ARM {
             System.out.println("FT: " + t.toString());
         }
 
-        int[] vals = setUnion(ft, ft.get(0).getItems(), ft.get(1).getItems());
+        //Testing setUnion method
+        int[] vals1 = setUnion(ft, ft.get(0).getItems(), ft.get(1).getItems());
+        int[] vals2 = setUnion(ft, ft.get(0).getItems(), ft.get(2).getItems());
+        int[] vals3 = setUnion(ft, vals1, vals2);
 
-        System.out.println(Arrays.toString(vals));
+        //Debugging print
+        System.out.println("V1: " + Arrays.toString(vals1) + "\nV2: " + Arrays.toString(vals2) + "\nV3: " + Arrays.toString(vals3));
+
+        
 
         //Heart of the apriori algorithm
         /*for(int k = 0; !lk.get(k).isEmpty(); k++) {
