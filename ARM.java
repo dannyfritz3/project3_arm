@@ -16,8 +16,22 @@ public class ARM {
     private static int minsupp;
     private static int numItems;
     private static int numTransactions;
-    private static double threshold = 0.95;
+    private static double threshold = 0.75;
     private static long startTime = System.nanoTime();
+
+    /**
+     * This variable determines which file the program will output to
+     * in OutputData/<filename>.txt
+     * VARIABLE VALUE  ---  ACTION
+     * accidents        -   Run on accidents.dat
+     * chess            -   Run on chess.dat
+     * kosarak          -   Run on kosarak.dat
+     * retail           -   Run on retail.dat
+     * simpledataset    -   Run on simpledataset.dat
+     */
+    private static String fileName = "chess";
+
+    private static File file;
 
     public static int[] generateFrequentItemSubset(int k) {
         int[] L1 = new int[0];
@@ -61,7 +75,7 @@ public class ARM {
         ft = genWeights(input, ft);
         ArrayList<Transaction> finalArr = new ArrayList<Transaction>();
 
-        while(!ft.isEmpty()) {
+        while (!ft.isEmpty()) {
             for (Transaction t : ft) {
                 if (t.getSupport() >= threshold) {
                     finalArr.add(t);
@@ -85,22 +99,43 @@ public class ARM {
 
         Collections.sort(finalArr, new Comparator<Transaction>() {
             public int compare(Transaction t1, Transaction t2) {
-                if(t1.getSupport() > t2.getSupport())
+                if (t1.getSupport() > t2.getSupport())
                     return -1;
-                if(t1.getSupport() < t2.getSupport())
+                if (t1.getSupport() < t2.getSupport())
                     return 1;
                 return 0;
             }
         });
-        
-        System.out.println("----FINAL----");
-        for (Transaction t : finalArr) {
-            System.out.println(t.toString());
+
+        try {
+
+            StringBuilder sb = new StringBuilder();
+            System.out.println("----FINAL----");
+            sb.append("TOTAL RULES: " + finalArr.size());
+            sb.append("\r\nTHRESHOLD  : " + threshold);
+            sb.append("\r\nTIME TO RUN: " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime) + " ms");
+            sb.append("\r\n----FINAL----\r\n");
+            for (Transaction t : finalArr) {
+                sb.append(t.toString());
+                sb.append("\r\n");
+                System.out.println(t.toString());
+            }
+            sb.append("-----END-----");
+            System.out.println("-------------");
+            System.out.println("TOTAL RULES: " + finalArr.size());
+            System.out.println("THRESHOLD  : " + threshold);
+            System.out.println("TIME TO RUN: " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime) + " ms");
+
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+
+            bw.write(sb.toString());
+
+            bw.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        System.out.println("-------------");
-        System.out.println("TOTAL RULES: " + finalArr.size());
-        System.out.println("THRESHOLD  : " + threshold);
-        System.out.println("TIME TO RUN: " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime()-startTime) + " ms");
+
         //Heart of the apriori algorithm
         /*for(int k = 0; !lk.get(k).isEmpty(); k++) {
             //ck.add(k+1, candidates);
@@ -197,6 +232,8 @@ public class ARM {
 
             //reassign sc for the data file you want to scan
             Scanner sc = scChess;
+
+            file = new File("OutputData/" + fileName +((int) (threshold*100)) + ".txt");
 
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
