@@ -15,7 +15,7 @@ public class ARM {
     private static ArrayList<int[]> transactionsList;
     private static int minsupp;
     private static int numItems;
-    private static double threshold = 0.55;
+    private static double threshold = 0.01;
     private static long startTime = System.nanoTime();
 
     /**
@@ -28,7 +28,7 @@ public class ARM {
      * retail           -   Run on retail.dat
      * simpledataset    -   Run on simpledataset.dat
      */
-    private static String fileName = "chess";
+    private static String fileName = "retail";
 
     private static File file;
 
@@ -203,7 +203,7 @@ public class ARM {
             transactionsList = new ArrayList<int[]>();
 
             //reassign sc for the data file you want to scan
-            Scanner sc = scChess;
+            Scanner sc = scRetail;
 
             file = new File("OutputData/" + fileName +((int) (threshold*100)) + ".txt");
 
