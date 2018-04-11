@@ -210,8 +210,15 @@ public class ARM {
         //Grab and store all of the unique prefixes and their locations in the transaction ArrayList
         ArrayList<Integer> prefixes = new ArrayList<Integer>();
         ArrayList<Integer> prefLocs = new ArrayList<Integer>();
-        int prefLength = String.valueOf(trans.get(0).getItems()[0]).length();
+
+        //Iterate through the transaction data and parse out the prefixes
         for(int i = 0; i < trans.size(); i++) {
+
+            //Get the prefixes of the current transactions
+            int[] prefArr = Arrays.copyOfRange(trans.get(i).getItems(), 0, trans.get(i).getItems().length-1);
+            System.out.println("PREFIX ARR: " + Arrays.toString(prefArr));
+
+            //Add prefixes and their locations to prefixes ArrayList and prefLocs ArrayList respectively
             for(int j = 0; j < trans.get(i).getItems().length-1; j++) {
                 Integer prefix = trans.get(i).getItems()[j];
                 if(!prefixes.contains(prefix)) {
@@ -232,6 +239,7 @@ public class ARM {
             opY[i] = y[i];
         }
 
+        //Union the arrays x and y
         Set<Integer> newSet = new HashSet<Integer>(Arrays.asList(opX));
         newSet.addAll(Arrays.asList(opY));
         Integer[] opArr = newSet.toArray(new Integer[newSet.size()]);
@@ -243,6 +251,7 @@ public class ARM {
         return outArr;
     }
 
+    //Transaction object that stores an integer array of values and a transaction support value
     static class Transaction {
 
         private int[]  items;
