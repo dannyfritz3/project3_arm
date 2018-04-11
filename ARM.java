@@ -257,6 +257,16 @@ public class ARM {
         return outArr;
     }
 
+    public static int [] getPrefix(int [] arr) {
+        int size = arr.length;
+        int [] newArr = new int[size-1];
+        
+        for(int i = 0; i < size - 2; i++) {
+            newArr[i] = arr[i];
+        }
+        return newArr;
+    }
+
     //Transaction object that stores an integer array of values and a transaction support value
     static class Transaction {
 
