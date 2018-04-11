@@ -15,8 +15,7 @@ public class ARM {
     private static ArrayList<int[]> transactionsList;
     private static int minsupp;
     private static int numItems;
-    private static int numTransactions;
-    private static double threshold = 0.75;
+    private static double threshold = 0.55;
     private static long startTime = System.nanoTime();
 
     /**
@@ -108,12 +107,14 @@ public class ARM {
         });
 
         try {
-
             StringBuilder sb = new StringBuilder();
+            Date currentDate = new Date(System.currentTimeMillis());
+            sb.append("LAST RUN   : " + currentDate + "\r\n");
+            long endTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime);
             System.out.println("----FINAL----");
             sb.append("TOTAL RULES: " + finalArr.size());
             sb.append("\r\nTHRESHOLD  : " + threshold);
-            sb.append("\r\nTIME TO RUN: " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime) + " ms");
+            sb.append("\r\nTIME TO RUN: " + endTime + " ms");
             sb.append("\r\n----FINAL----\r\n");
             for (Transaction t : finalArr) {
                 sb.append(t.toString());
@@ -124,7 +125,7 @@ public class ARM {
             System.out.println("-------------");
             System.out.println("TOTAL RULES: " + finalArr.size());
             System.out.println("THRESHOLD  : " + threshold);
-            System.out.println("TIME TO RUN: " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime) + " ms");
+            System.out.println("TIME TO RUN: " + endTime + " ms");
 
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 
@@ -135,11 +136,6 @@ public class ARM {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        //Heart of the apriori algorithm
-        /*for(int k = 0; !lk.get(k).isEmpty(); k++) {
-            //ck.add(k+1, candidates);
-        }*/
     }
 
     /**
@@ -149,7 +145,6 @@ public class ARM {
      */
     private static ArrayList<Transaction> genWeights(ArrayList<int[]> input, ArrayList<Transaction> data) {
         for (Transaction t : data) {
-            double supp = 0.0;
             int suppCount = 0;
 
             for (int[] arr : input) {
@@ -190,29 +185,6 @@ public class ARM {
             t.setSupport((double) suppCount / (double) input.size());
         }
         return data;
-    }
-
-    private static ArrayList<Transaction> updateSets(ArrayList<Transaction> data, double threshold, int k) {
-        for (int i = 0; i < data.size(); i++) {
-            if (data.get(i).getSupport() < threshold) {
-                data.remove(i);
-            }
-        }
-
-        ArrayList<Transaction> arrTransaction = new ArrayList<Transaction>();
-
-        int[] group = new int[] {};
-
-        for (int i = 0; i < data.size(); i++) {
-            for (int j = i + 1; j < data.size(); j++) {
-                group = new int[k];
-                group[0] = data.get(i).getItems()[0];
-                group[1] = data.get(j).getItems()[0];
-                Transaction t = new Transaction(group, threshold);
-                arrTransaction.add(t);
-            }
-        }
-        return arrTransaction;
     }
 
     public static void main(String[] args) throws IndexOutOfBoundsException, FileNotFoundException {
