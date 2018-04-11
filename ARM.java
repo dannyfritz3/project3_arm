@@ -210,6 +210,7 @@ public class ARM {
         //Grab and store all of the unique prefixes and their locations in the transaction ArrayList
         ArrayList<Integer> prefixes = new ArrayList<Integer>();
         ArrayList<Integer> prefLocs = new ArrayList<Integer>();
+        int prefLength = String.valueOf(trans.get(0).getItems()[0]).length();
         for(int i = 0; i < trans.size(); i++) {
             for(int j = 0; j < trans.get(i).getItems().length-1; j++) {
                 Integer prefix = trans.get(i).getItems()[j];
