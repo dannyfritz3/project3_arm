@@ -7,6 +7,7 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.io.*;
 
 public class ARM {
@@ -15,6 +16,8 @@ public class ARM {
     private static int minsupp;
     private static int numItems;
     private static int numTransactions;
+    private static double threshold = 0.95;
+    private static long startTime = System.nanoTime();
 
     public static int[] generateFrequentItemSubset(int k) {
         int[] L1 = new int[0];
@@ -26,9 +29,6 @@ public class ARM {
 
     private static void apriori(int size, ArrayList<int[]> input) {
         //Variables used in the method
-        ArrayList<ArrayList<Integer>> ck = new ArrayList<ArrayList<Integer>>();
-        ArrayList<ArrayList<Integer>> lk = new ArrayList<ArrayList<Integer>>();
-        ArrayList<ArrayList<Integer>> l1 = new ArrayList<ArrayList<Integer>>();
         ArrayList<Transaction> at = new ArrayList<Transaction>();
         ArrayList<Transaction> ft = new ArrayList<Transaction>();
 
@@ -62,7 +62,6 @@ public class ARM {
         ArrayList<Transaction> finalArr = new ArrayList<Transaction>();
 
         while(!ft.isEmpty()) {
-            double threshold = 0.3;
             for (Transaction t : ft) {
                 if (t.getSupport() >= threshold) {
                     finalArr.add(t);
@@ -84,10 +83,24 @@ public class ARM {
             ft = genWeights(input, transArr);
         }
 
+        Collections.sort(finalArr, new Comparator<Transaction>() {
+            public int compare(Transaction t1, Transaction t2) {
+                if(t1.getSupport() > t2.getSupport())
+                    return -1;
+                if(t1.getSupport() < t2.getSupport())
+                    return 1;
+                return 0;
+            }
+        });
+        
         System.out.println("----FINAL----");
         for (Transaction t : finalArr) {
             System.out.println(t.toString());
         }
+        System.out.println("-------------");
+        System.out.println("TOTAL RULES: " + finalArr.size());
+        System.out.println("THRESHOLD  : " + threshold);
+        System.out.println("TIME TO RUN: " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime()-startTime) + " ms");
         //Heart of the apriori algorithm
         /*for(int k = 0; !lk.get(k).isEmpty(); k++) {
             //ck.add(k+1, candidates);
@@ -183,7 +196,7 @@ public class ARM {
             transactionsList = new ArrayList<int[]>();
 
             //reassign sc for the data file you want to scan
-            Scanner sc = scSimple;
+            Scanner sc = scChess;
 
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
