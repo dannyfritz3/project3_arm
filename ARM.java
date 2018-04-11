@@ -80,15 +80,20 @@ public class ARM {
             System.out.println("FT: " + t.toString());
         }
 
+        for(int i = 0; i < ft.size(); i++) {
+            for(int j = i+1; j < ft.size(); j++) {
+                System.out.println(Arrays.toString(setUnion(ft, ft.get(i).getItems(), ft.get(j).getItems())));
+            }
+        }
         //Testing setUnion method
+        /*
         int[] vals1 = setUnion(ft, ft.get(0).getItems(), ft.get(1).getItems());
         int[] vals2 = setUnion(ft, ft.get(0).getItems(), ft.get(2).getItems());
         int[] vals3 = setUnion(ft, vals1, vals2);
 
         //Debugging print
         System.out.println("V1: " + Arrays.toString(vals1) + "\nV2: " + Arrays.toString(vals2) + "\nV3: " + Arrays.toString(vals3));
-
-        
+        */
 
         //Heart of the apriori algorithm
         /*for(int k = 0; !lk.get(k).isEmpty(); k++) {
@@ -213,6 +218,8 @@ public class ARM {
     }
 
     private static int[] setUnion(ArrayList<Transaction> trans, int[] x, int[] y) {
+        ArrayList<int[]> retArr = new ArrayList<int[]>();
+
         //Grab and store all of the unique prefixes and their locations in the transaction ArrayList
         ArrayList<Integer> prefixes = new ArrayList<Integer>();
         ArrayList<Integer> prefLocs = new ArrayList<Integer>();
@@ -222,7 +229,7 @@ public class ARM {
 
             //Get the prefixes of the current transactions
             int[] prefArr = Arrays.copyOfRange(trans.get(i).getItems(), 0, trans.get(i).getItems().length-1);
-            System.out.println("PREFIX ARR: " + Arrays.toString(prefArr));
+            //System.out.println("PREFIX ARR: " + Arrays.toString(prefArr));
 
             //Add prefixes and their locations to prefixes ArrayList and prefLocs ArrayList respectively
             for(int j = 0; j < trans.get(i).getItems().length-1; j++) {
@@ -234,7 +241,8 @@ public class ARM {
             }
         }
         
-        System.out.println(prefixes + "\n" + prefLocs);
+        //System.out.println(prefixes + "\n" + prefLocs);
+        System.out.println("U: " + Arrays.toString(x) + " : " + Arrays.toString(y));
         Integer[] opX = new Integer[x.length];
         for(int i = 0; i < x.length; i++) {
             opX[i] = x[i];
