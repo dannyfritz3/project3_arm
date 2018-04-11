@@ -80,20 +80,24 @@ public class ARM {
             System.out.println("FT: " + t.toString());
         }
 
+        double threshold = 0.3;
+        ArrayList<Transaction> transArr = new ArrayList<Transaction>();
         for (int i = 0; i < ft.size(); i++) {
             for (int j = i + 1; j < ft.size(); j++) {
-                System.out.println(Arrays.toString(setUnion(ft, ft.get(i).getItems(), ft.get(j).getItems())));
+                Transaction x = ft.get(i);
+                Transaction y = ft.get(j);
+                if(Arrays.equals(getPrefix(x.getItems()), getPrefix(y.getItems()))) {
+                    if(x.getSupport() >= threshold && y.getSupport() >= threshold) {
+                        transArr.add(new Transaction(setUnion(ft, x.getItems(), y.getItems()), 0.0));
+                    }
+                }
+                //System.out.println(Arrays.toString(setUnion(ft, ft.get(i).getItems(), ft.get(j).getItems())));
             }
         }
-        //Testing setUnion method
-        /*
-        int[] vals1 = setUnion(ft, ft.get(0).getItems(), ft.get(1).getItems());
-        int[] vals2 = setUnion(ft, ft.get(0).getItems(), ft.get(2).getItems());
-        int[] vals3 = setUnion(ft, vals1, vals2);
-        
-        //Debugging print
-        System.out.println("V1: " + Arrays.toString(vals1) + "\nV2: " + Arrays.toString(vals2) + "\nV3: " + Arrays.toString(vals3));
-        */
+
+        for(Transaction t : genWeights(input, transArr)) {
+            System.out.println(t.toString());
+        }
 
         //Heart of the apriori algorithm
         /*for(int k = 0; !lk.get(k).isEmpty(); k++) {
@@ -217,37 +221,13 @@ public class ARM {
         }
     }
 
+    //Perform the union of two input integer arrays
     private static int[] setUnion(ArrayList<Transaction> trans, int[] x, int[] y) {
-        ArrayList<int[]> retArr = new ArrayList<int[]>();
-
-        //Grab and store all of the unique prefixes and their locations in the transaction ArrayList
-        ArrayList<Integer> prefixes = new ArrayList<Integer>();
-        ArrayList<Integer> prefLocs = new ArrayList<Integer>();
-
-        //Iterate through the transaction data and parse out the prefixes
-        for (int i = 0; i < trans.size(); i++) {
-
-            //Get the prefixes of the current transactions
-            //int[] prefArr = Arrays.copyOfRange(trans.get(i).getItems(), 0, trans.get(i).getItems().length-1);
-            //System.out.println("PREFIX ARR: " + Arrays.toString(prefArr));
-
-            //Add prefixes and their locations to prefixes ArrayList and prefLocs ArrayList respectively
-            for (int j = 0; j < trans.get(i).getItems().length - 1; j++) {
-                Integer prefix = trans.get(i).getItems()[j];
-                if (!prefixes.contains(prefix)) {
-                    prefixes.add(prefix);
-                    prefLocs.add(i);
-                }
-            }
-        }
-
-        //System.out.println(prefixes + "\n" + prefLocs);
-
 
         if (Arrays.equals(getPrefix(x), getPrefix(y))) {
 
-            System.out.println("U: " + "PRE: " + Arrays.toString(getPrefix(x)) + " | " + Arrays.toString(x) + " : PRE: "
-            + Arrays.toString(getPrefix(y)) + " | " + Arrays.toString(y));
+            //System.out.println("U: " + "PRE: " + Arrays.toString(getPrefix(x)) + " | " + Arrays.toString(x) + " : PRE: "
+            //+ Arrays.toString(getPrefix(y)) + " | " + Arrays.toString(y));
 
             Integer[] opX = new Integer[x.length];
             for (int i = 0; i < x.length; i++) {
@@ -273,6 +253,7 @@ public class ARM {
         return new int[]{-1};
     }
 
+    //Return the prefix for the given array
     public static int[] getPrefix(int[] arr) {
         int size = arr.length;
         int[] newArr = new int[size - 1];
