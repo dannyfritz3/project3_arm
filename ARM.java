@@ -59,46 +59,35 @@ public class ARM {
 
         //Generate updated support weights for the transactions
         ft = genWeights(input, ft);
+        ArrayList<Transaction> finalArr = new ArrayList<Transaction>();
 
-        //Debugging print after generated weights
-        System.out.println("------------");
-        for (Transaction t : ft) {
-            System.out.println("FT: " + t.toString());
-        }
-
-        ft = updateSets(ft, 0.5, 2);
-        //Debugging print after update
-        System.out.println("---update1---");
-        for (Transaction t : ft) {
-            System.out.println("FT: " + t.toString());
-        }
-
-        ft = genWeights(input, ft);
-        //Debugging print after update
-        System.out.println("---update2---");
-        for (Transaction t : ft) {
-            System.out.println("FT: " + t.toString());
-        }
-
-        double threshold = 0.3;
-        ArrayList<Transaction> transArr = new ArrayList<Transaction>();
-        for (int i = 0; i < ft.size(); i++) {
-            for (int j = i + 1; j < ft.size(); j++) {
-                Transaction x = ft.get(i);
-                Transaction y = ft.get(j);
-                if(Arrays.equals(getPrefix(x.getItems()), getPrefix(y.getItems()))) {
-                    if(x.getSupport() >= threshold && y.getSupport() >= threshold) {
-                        transArr.add(new Transaction(setUnion(ft, x.getItems(), y.getItems()), 0.0));
+        while(!ft.isEmpty()) {
+            double threshold = 0.3;
+            for (Transaction t : ft) {
+                if (t.getSupport() >= threshold) {
+                    finalArr.add(t);
+                }
+                //System.out.println(t.toString());
+            }
+            ArrayList<Transaction> transArr = new ArrayList<Transaction>();
+            for (int i = 0; i < ft.size(); i++) {
+                for (int j = i + 1; j < ft.size(); j++) {
+                    Transaction x = ft.get(i);
+                    Transaction y = ft.get(j);
+                    if (Arrays.equals(getPrefix(x.getItems()), getPrefix(y.getItems()))) {
+                        if (x.getSupport() >= threshold && y.getSupport() >= threshold) {
+                            transArr.add(new Transaction(setUnion(ft, x.getItems(), y.getItems()), 0.0));
+                        }
                     }
                 }
-                //System.out.println(Arrays.toString(setUnion(ft, ft.get(i).getItems(), ft.get(j).getItems())));
             }
+            ft = genWeights(input, transArr);
         }
 
-        for(Transaction t : genWeights(input, transArr)) {
+        System.out.println("----FINAL----");
+        for (Transaction t : finalArr) {
             System.out.println(t.toString());
         }
-
         //Heart of the apriori algorithm
         /*for(int k = 0; !lk.get(k).isEmpty(); k++) {
             //ck.add(k+1, candidates);
@@ -250,7 +239,7 @@ public class ARM {
             }
             return outArr;
         }
-        return new int[]{-1};
+        return new int[] { -1 };
     }
 
     //Return the prefix for the given array
