@@ -124,7 +124,7 @@ public class ARM {
             bw.write(sb.toString());
 
             bw.close();
-
+            System.out.println("Done after : " + endTime + " ms");
         } catch (Exception e) {
             e.printStackTrace();
         }
