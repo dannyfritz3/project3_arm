@@ -1,4 +1,3 @@
-
 /** 
  * Authors: Danny Fritz and Conor Lorsung
  * Purpose: Apriori algorithm for science and a good grade.
@@ -205,7 +204,7 @@ public class ARM {
             //reassign sc for the data file you want to scan
             Scanner sc = scRetail;
 
-            file = new File("OutputData/" + fileName +((int) (threshold*100)) + ".txt");
+            file = new File("OutputData/" + fileName +((threshold*100)) + ".txt");
 
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
