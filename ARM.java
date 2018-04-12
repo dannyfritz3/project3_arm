@@ -20,16 +20,67 @@ public class ARM {
     /**
      * This variable determines which file the program will output to
      * in OutputData/<filename>.txt
+     * 
+     * DO NOT FORGET TO CHANGE SCANNER TO USE APPROPRIATE FILE IN MAIN()
+     * 
      * VARIABLE VALUE  ---  ACTION
-     * accidents        -   Run on accidents.dat
-     * chess            -   Run on chess.dat
-     * kosarak          -   Run on kosarak.dat
-     * retail           -   Run on retail.dat
-     * simpledataset    -   Run on simpledataset.dat
+     * accidents        -   Print from accidents.dat
+     * chess            -   Print from chess.dat
+     * kosarak          -   Print from kosarak.dat
+     * retail           -   Print from retail.dat
+     * simpledataset    -   Print from simpledataset.dat
      */
     private static String fileName = "chess";
 
     private static File file;
+
+    public static void main(String[] args) throws IndexOutOfBoundsException, FileNotFoundException {
+        System.out.println("This may take a while...\nRunning with the following parameters:\n"+
+        "Output file: OutputData/" + fileName + ((threshold*100)) + ".txt\n" + 
+        "Threshold  : " + ((threshold * 100)) + "%");
+        minsupp = 5;
+        if (minsupp < 0 || minsupp > 100) {
+            throw new IndexOutOfBoundsException("Please select a minsupp threshold between 0 and 100");
+        }
+        try {
+            Scanner scAccidents = new Scanner(new File("datasets/accidents.dat"));
+            Scanner scChess = new Scanner(new File("datasets/chess.dat"));
+            Scanner scKosarak = new Scanner(new File("datasets/kosarak.dat"));
+            Scanner scRetail = new Scanner(new File("datasets/retail.dat"));
+            Scanner scSimple = new Scanner(new File("datasets/simpledataset.dat"));
+
+            transactionsList = new ArrayList<int[]>();
+
+            //reassign sc for the data file you want to scan
+            //*******************
+            Scanner sc = scChess;
+            //*******************
+            file = new File("OutputData/" + fileName +((threshold*100)) + ".txt");
+
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                String[] strArr = line.split(" ");
+                int[] transaction = new int[strArr.length];
+
+                for (int i = 0; i < strArr.length; i++) {
+                    transaction[i] = Integer.parseInt(strArr[i]);
+                }
+
+                transactionsList.add(transaction);
+            }
+
+            scAccidents.close();
+            scChess.close();
+            scKosarak.close();
+            scRetail.close();
+            scSimple.close();
+
+            apriori(5, transactionsList);
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
 
     public static int[] generateFrequentItemSubset(int k) {
         int[] L1 = new int[0];
@@ -177,53 +228,6 @@ public class ARM {
             t.setSupport((double) suppCount / (double) input.size());
         }
         return data;
-    }
-
-    public static void main(String[] args) throws IndexOutOfBoundsException, FileNotFoundException {
-        System.out.println("This may take a while...\nRunning with the following parameters:\n"+
-        "Output file: OutputData/" + fileName + ((threshold*100)) + ".txt\n" + 
-        "Threshold  : " + ((threshold * 100)) + "%");
-        minsupp = 5;
-        if (minsupp < 0 || minsupp > 100) {
-            throw new IndexOutOfBoundsException("Please select a minsupp threshold between 0 and 100");
-        }
-        try {
-            Scanner scAccidents = new Scanner(new File("datasets/accidents.dat"));
-            Scanner scChess = new Scanner(new File("datasets/chess.dat"));
-            Scanner scKosarak = new Scanner(new File("datasets/kosarak.dat"));
-            Scanner scRetail = new Scanner(new File("datasets/retail.dat"));
-            Scanner scSimple = new Scanner(new File("datasets/simpledataset.dat"));
-
-            transactionsList = new ArrayList<int[]>();
-
-            //reassign sc for the data file you want to scan
-            Scanner sc = scChess;
-
-            file = new File("OutputData/" + fileName +((threshold*100)) + ".txt");
-
-            while (sc.hasNextLine()) {
-                String line = sc.nextLine();
-                String[] strArr = line.split(" ");
-                int[] transaction = new int[strArr.length];
-
-                for (int i = 0; i < strArr.length; i++) {
-                    transaction[i] = Integer.parseInt(strArr[i]);
-                }
-
-                transactionsList.add(transaction);
-            }
-
-            scAccidents.close();
-            scChess.close();
-            scKosarak.close();
-            scRetail.close();
-            scSimple.close();
-
-            apriori(5, transactionsList);
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
     }
 
     //Perform the union of two input integer arrays
