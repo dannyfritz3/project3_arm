@@ -14,8 +14,10 @@ public class ARM {
     private static ArrayList<int[]> transactionsList;
     private static int minsupp;
     private static int numItems;
-    private static double threshold = 0.95;
+    private static double threshold = 0.50;
     private static long startTime = System.nanoTime();
+    private static ArrayList<Integer> pruneList = new ArrayList<Integer>();
+    private static boolean verbose = false;
 
     /**
      * This variable determines which file the program will output to
@@ -30,7 +32,7 @@ public class ARM {
      * retail           -   Print from retail.dat
      * simpledataset    -   Print from simpledataset.dat
      */
-    private static String fileName = "chess";
+    private static String fileName = "ds1";
 
     private static File file;
 
@@ -48,12 +50,13 @@ public class ARM {
             Scanner scKosarak = new Scanner(new File("datasets/kosarak.dat"));
             Scanner scRetail = new Scanner(new File("datasets/retail.dat"));
             Scanner scSimple = new Scanner(new File("datasets/simpledataset.dat"));
+            Scanner scDs1Dat = new Scanner(new File("datasets/ds1.dat"));
 
             transactionsList = new ArrayList<int[]>();
 
             //reassign sc for the data file you want to scan
             //*******************
-            Scanner sc = scChess;
+            Scanner sc = scDs1Dat;
             //*******************
             file = new File("OutputData/" + fileName +((threshold*100)) + ".txt");
 
@@ -131,6 +134,7 @@ public class ARM {
                 }
             }
             ArrayList<Transaction> transArr = new ArrayList<Transaction>();
+            int prune = 0;
             for (int i = 0; i < ft.size(); i++) {
                 for (int j = i + 1; j < ft.size(); j++) {
                     Transaction x = ft.get(i);
@@ -138,10 +142,15 @@ public class ARM {
                     if (Arrays.equals(getPrefix(x.getItems()), getPrefix(y.getItems()))) {
                         if (x.getSupport() >= threshold && y.getSupport() >= threshold) {
                             transArr.add(new Transaction(setUnion(ft, x.getItems(), y.getItems()), 0.0));
+                        } else {
+                            prune++;
                         }
+                    } else {
+                        prune++;
                     }
                 }
             }
+            pruneList.add(prune);
             ft = genWeights(input, transArr);
         }
 
@@ -158,9 +167,10 @@ public class ARM {
         try {
             StringBuilder sb = new StringBuilder();
             Date currentDate = new Date(System.currentTimeMillis());
-            sb.append("LAST RUN   : " + currentDate + "\r\n");
             long endTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime);
-            sb.append("TOTAL RULES: " + finalArr.size());
+            if(verbose) {
+            sb.append("LAST RUN   : " + currentDate + "\r\n");
+            sb.append("TOTAL FIS  : " + finalArr.size());
             sb.append("\r\nTHRESHOLD  : " + threshold);
             sb.append("\r\nTIME TO RUN: " + endTime + " ms");
             sb.append("\r\n----FINAL----\r\n");
@@ -169,7 +179,15 @@ public class ARM {
                 sb.append("\r\n");
             }
             sb.append("-----END-----");
-
+            for(int i = 0; i < pruneList.size(); i++) {
+                sb.append("\r\nSTEP "+(i+1)+": " + pruneList.get(i));
+            }
+            } else {
+                for(Transaction t : finalArr) {
+                    sb.append(t.toString());
+                    sb.append("\r\n");
+                }
+            }
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 
             bw.write(sb.toString());
@@ -298,7 +316,12 @@ public class ARM {
         }
 
         public String toString() {
-            return Arrays.toString(this.items) + " : " + this.support;
+            StringBuilder sb = new StringBuilder();
+            for(int i : this.items) {
+                sb.append(i + " ");
+            }
+            sb.append("("+this.support+")");
+            return sb.toString();
         }
     }
 }

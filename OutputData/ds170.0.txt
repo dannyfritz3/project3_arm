@@ -1,0 +1,9 @@
+LAST RUN   : Thu Apr 12 09:47:23 CDT 2018
+TOTAL FIS  : 3
+THRESHOLD  : 0.7
+TIME TO RUN: 128 ms
+----FINAL----
+[5] : 0.8
+[1] : 0.7
+[6] : 0.7
+-----END-----
