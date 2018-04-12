@@ -14,7 +14,7 @@ public class ARM {
     private static ArrayList<int[]> transactionsList;
     private static int minsupp;
     private static int numItems;
-    private static double threshold = 0.01;
+    private static double threshold = 0.95;
     private static long startTime = System.nanoTime();
 
     /**
@@ -27,7 +27,7 @@ public class ARM {
      * retail           -   Run on retail.dat
      * simpledataset    -   Run on simpledataset.dat
      */
-    private static String fileName = "retail";
+    private static String fileName = "chess";
 
     private static File file;
 
@@ -78,7 +78,6 @@ public class ARM {
                 if (t.getSupport() >= threshold) {
                     finalArr.add(t);
                 }
-                //System.out.println(t.toString());
             }
             ArrayList<Transaction> transArr = new ArrayList<Transaction>();
             for (int i = 0; i < ft.size(); i++) {
@@ -110,7 +109,6 @@ public class ARM {
             Date currentDate = new Date(System.currentTimeMillis());
             sb.append("LAST RUN   : " + currentDate + "\r\n");
             long endTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime);
-            System.out.println("----FINAL----");
             sb.append("TOTAL RULES: " + finalArr.size());
             sb.append("\r\nTHRESHOLD  : " + threshold);
             sb.append("\r\nTIME TO RUN: " + endTime + " ms");
@@ -118,13 +116,8 @@ public class ARM {
             for (Transaction t : finalArr) {
                 sb.append(t.toString());
                 sb.append("\r\n");
-                System.out.println(t.toString());
             }
             sb.append("-----END-----");
-            System.out.println("-------------");
-            System.out.println("TOTAL RULES: " + finalArr.size());
-            System.out.println("THRESHOLD  : " + threshold);
-            System.out.println("TIME TO RUN: " + endTime + " ms");
 
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 
@@ -187,7 +180,9 @@ public class ARM {
     }
 
     public static void main(String[] args) throws IndexOutOfBoundsException, FileNotFoundException {
-        //double minsupp = Double.parseDouble(args[0]);
+        System.out.println("This may take a while...\nRunning with the following parameters:\n"+
+        "Output file: OutputData/" + fileName + ((threshold*100)) + ".txt\n" + 
+        "Threshold  : " + ((threshold * 100)) + "%");
         minsupp = 5;
         if (minsupp < 0 || minsupp > 100) {
             throw new IndexOutOfBoundsException("Please select a minsupp threshold between 0 and 100");
@@ -202,7 +197,7 @@ public class ARM {
             transactionsList = new ArrayList<int[]>();
 
             //reassign sc for the data file you want to scan
-            Scanner sc = scRetail;
+            Scanner sc = scChess;
 
             file = new File("OutputData/" + fileName +((threshold*100)) + ".txt");
 
@@ -235,9 +230,6 @@ public class ARM {
     private static int[] setUnion(ArrayList<Transaction> trans, int[] x, int[] y) {
 
         if (Arrays.equals(getPrefix(x), getPrefix(y))) {
-
-            //System.out.println("U: " + "PRE: " + Arrays.toString(getPrefix(x)) + " | " + Arrays.toString(x) + " : PRE: "
-            //+ Arrays.toString(getPrefix(y)) + " | " + Arrays.toString(y));
 
             Integer[] opX = new Integer[x.length];
             for (int i = 0; i < x.length; i++) {
